@@ -1,0 +1,35 @@
+{
+  "name": "rollout-ui",
+  "version": "0.0.1",
+  "description": "an admin interface for the node-rollout module",
+  "author": "Dustin Diaz",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+    "rollout",
+    "features",
+    "redis"
+  ],
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "redis": "^2.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ded/rollout-ui.git"
+  },
+  "devDependencies": {
+    "redis": "~0.10.1",
+    "mocha": "~1.18.2",
+    "chai": "~1.9.1",
+    "sinon": "~1.9.0",
+    "sinon-chai": "~2.5.0",
+    "chai-as-promised": "~4.1.1",
+    "express": "^4.15.3",
+    "node-rollout": "^0.4.2",
+    "jshint": "~2.5.0"
+  }
+}
