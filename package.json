@@ -15,21 +15,21 @@
   ],
   "dependencies": {
     "bluebird": "^3.4.6",
-    "redis": "^2.8.0"
+    "pug": "^2.0.0-rc.4",
+    "redis": "^2.8.0",
+    "node-rollout": "^0.4.2"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ded/rollout-ui.git"
   },
   "devDependencies": {
-    "redis": "~0.10.1",
     "mocha": "~1.18.2",
     "chai": "~1.9.1",
     "sinon": "~1.9.0",
     "sinon-chai": "~2.5.0",
     "chai-as-promised": "~4.1.1",
     "express": "^4.15.3",
-    "node-rollout": "^0.4.2",
     "jshint": "~2.5.0"
   }
 }
