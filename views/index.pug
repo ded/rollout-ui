@@ -1,4 +1,38 @@
-h1 hello world from pug
-ul
-  each flag in rollout_flags
-    li flag name: #{flag}
+doctype
+html
+  head
+    title Rollout Admin UI
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css' integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M' crossorigin='anonymous')
+
+  body
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      a.navbar-brand(href='') Rollout Administration
+
+    .container.mt-4
+      each mod, key in all_mods
+        h3= utils.formatFlag(key)
+        each val, name in mod
+          .row.p-3.mb-3.border.rounded.border-info
+            .input-group(data-key-name=key, data-mod-name=name)
+              span.input-group-btn
+                button.btn.btn-secondary(type='button', disabled='disabled')= name == 'id' ? 'everyone' : name
+              input.form-control(type='text', placeholder='00', value=val)
+              span.input-group-btn
+                button.btn.btn-secondary.update(type='button') update
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+    script.
+      $('body').on('click', '.update', function (e) {
+        var $group = $(this).closest('.input-group')
+        $.ajax({
+          url: location.href,
+          method: 'put',
+          data: { data: JSON.stringify({
+            flag: $group.data('key-name'),
+            mod: $group.data('mod-name'),
+            val: $group.find('.form-control').val()
+          })}
+        })
+        .then(function () {
+          location.reload()
+        })
+      })
