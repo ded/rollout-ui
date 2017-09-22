@@ -22,7 +22,6 @@ router.put('/', populate, (req, res, next) => {
   let body = JSON.parse(req.body.data)
   let update = {}
   update[body.mod] = body.val
-  console.log(body.flag, update)
   rollout.update(body.flag, update)
   .finally(() => {
     return res.status(201).json({
