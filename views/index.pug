@@ -3,22 +3,58 @@ html
   head
     title Rollout Admin UI
     link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css' integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M' crossorigin='anonymous')
-
+    style.
+      .slider {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 100%;
+          margin-left: 1rem;
+          margin-right: 1rem;
+          margin-top: 1rem;
+          height: 10px;
+          border-radius: 5px;
+          background: #d3d3d3;
+          outline: none;
+          opacity: 0.7;
+          -webkit-transition: .2s;
+          transition: opacity .2s;
+      }
+      .slider:hover {
+        opacity: 1;
+      }
+      .slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 30px;
+          height: 30px;
+          background: #4CAF50;
+          cursor: pointer;
+          border-radius: 50%
+      }
+      footer {
+        text-align: center
+      }
+      .container {
+        margin-top: 6rem;
+      }
   body
-    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+    nav.navbar.navbar-dark.bg-dark.fixed-top
       a.navbar-brand(href='') Rollout Administration
 
-    .container.mt-4
+    .container
       each mod, key in all_mods
         h3= utils.formatFlag(key)
         each val, name in mod
           .row.p-3.mb-3.border.rounded.border-info
+            span.val= val
             .input-group(data-key-name=key, data-mod-name=name)
               span.input-group-btn
-                button.btn.btn-secondary(type='button', disabled='disabled')= name == 'id' ? 'everyone' : name
-              input.form-control(type='text', placeholder='00', value=val)
+                button.btn.btn-info(type='button', disabled='disabled')= name == 'id' ? 'everyone' : name
+              input.slider(type='range', min='0', max='100000', value=val * 1000)
               span.input-group-btn
-                button.btn.btn-secondary.update(type='button') update
+                button.btn.btn-secondary.update.disabled(type='button') update
+    footer
+      p <a href='https://github.com/ded/rollout-ui'>rollout-ui</a> License MIT, <code>v 0.0.2</code>. Developed by Dustin Diaz.
     script(src='https://code.jquery.com/jquery-3.2.1.min.js')
     script.
       $('body').on('click', '.update', function (e) {
@@ -29,10 +65,15 @@ html
           data: { data: JSON.stringify({
             flag: $group.data('key-name'),
             mod: $group.data('mod-name'),
-            val: $group.find('.form-control').val()
+            val: $group.find('input.slider').val() / 1000
           })}
         })
         .then(function () {
           location.reload()
         })
-      })
+      });
+      $('body').on('input', 'input.slider', function () {
+        var $row = $(this).closest('.row')
+        $row.find('span.val').text(this.value / 1000);
+        $row.find('button.update').toggleClass('disabled', this.value == this.defaultValue);
+      });
