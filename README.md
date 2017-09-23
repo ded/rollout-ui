@@ -1,5 +1,5 @@
 ## Rollout UI
-an administration interface built for the `[node-rollout](https://github.com/mix/node-rollout)` module.
+an administration interface built for the [node-rollout](https://github.com/mix/node-rollout) module.
 
 ```sh
 npm i rollout-ui --save
