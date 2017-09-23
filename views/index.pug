@@ -3,7 +3,12 @@ html
   head
     title Rollout Admin UI
     link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css' integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M' crossorigin='anonymous')
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
     style.
+      body {
+        background: #f1f1f1;
+      }
       .slider {
           -webkit-appearance: none;
           appearance: none;
@@ -19,7 +24,7 @@ html
           -webkit-transition: .2s;
           transition: opacity .2s;
       }
-      .slider:hover {
+      .row:hover .slider {
         opacity: 1;
       }
       .slider::-webkit-slider-thumb {
@@ -37,24 +42,35 @@ html
       .container {
         margin-top: 6rem;
       }
+      .inner {
+        box-sizing: border-box;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .row {
+        background: #fff;
+      }
+      button.btn.disabled {
+        opacity: 0.4;
+      }
   body
     nav.navbar.navbar-dark.bg-dark.fixed-top
       a.navbar-brand(href='') Rollout Administration
 
     .container
-      each mod, key in all_mods
-        h3= utils.formatFlag(key)
-        each val, name in mod
-          .row.p-3.mb-3.border.rounded.border-info
-            span.val= val
-            .input-group(data-key-name=key, data-mod-name=name)
-              span.input-group-btn
-                button.btn.btn-info(type='button', disabled='disabled')= name == 'id' ? 'everyone' : name
-              input.slider(type='range', min='0', max='100000', value=val * 1000)
-              span.input-group-btn
-                button.btn.btn-secondary.update.disabled(type='button') update
-    footer
-      p <a href='https://github.com/ded/rollout-ui'>rollout-ui</a> License MIT, <code>v 0.0.2</code>. Developed by Dustin Diaz.
+      .inner
+        each mod, key in all_mods
+          h3= utils.formatFlag(key)
+          each val, name in mod
+            .row.p-3.mb-3.border.rounded.border-info
+              code.name= utils.formatFlag(name == 'id' ? 'everyone' : name)
+              input.val(type='text', value=val)
+              .input-group(data-key-name=key, data-mod-name=name)
+                input.slider(type='range', min='0', max='100000', value=val * 1000)
+                span.input-group-btn
+                  button.btn.btn-primary.update.disabled(type='button') update
+        footer
+          p <a href='https://github.com/ded/rollout-ui'>rollout-ui</a> License MIT, <code>v 0.0.2</code>. Developed by <a href='https://twitter.com/ded'>@ded</a>.
     script(src='https://code.jquery.com/jquery-3.2.1.min.js')
     script.
       $('body').on('click', '.update', function (e) {
@@ -74,6 +90,13 @@ html
       });
       $('body').on('input', 'input.slider', function () {
         var $row = $(this).closest('.row')
-        $row.find('span.val').text(this.value / 1000);
+        $row.find('input.val').val(this.value / 1000);
+        $row.find('button.update').toggleClass('disabled', this.value == this.defaultValue);
+      });
+
+      $('body').on('input', 'input.val', function (e) {
+        this.value = this.value.replace(/[^\d\.]/g, '')
+        var $row = $(this).closest('.row')
+        $row.find('input.slider').val(this.value * 1000);
         $row.find('button.update').toggleClass('disabled', this.value == this.defaultValue);
       });
