@@ -1,4 +1,5 @@
 var express = require('express')
+let version = require('./package.json').version
 let pug = require('pug')
 let Prom = require('bluebird')
 var router = express.Router()
@@ -32,6 +33,7 @@ router.put('/', populate, (req, res, next) => {
 
 function populate(req, res, next) {
   res.locals.utils = utils
+  res.locals.version = version
   let flags = res.locals.rollout_flags = rollout.flags()
   let all = {}
   Prom.all(res.locals.rollout_flags.map((flag) => {
